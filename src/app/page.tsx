@@ -1,65 +1,72 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import React, { useState } from "react";
+import initialData from "../data/dashboard-data.json";
+import { DashboardData, WalletData } from "../types/dashboard";
+
+// Dashboard subcomponents
+import Header from "../components/dashboard/Header";
+import KPICards from "../components/dashboard/KPICards";
+import ChainCards from "../components/dashboard/ChainCards";
+import GrowthChart from "../components/dashboard/GrowthChart";
+import CapacityWidget from "../components/dashboard/CapacityWidget";
+import Leaderboard from "../components/dashboard/Leaderboard";
+import WalletTable from "../components/dashboard/WalletTable";
+import WalletDrawer from "../components/dashboard/WalletDrawer";
+
+export default function DashboardHome() {
+  const [data, setData] = useState<DashboardData>(initialData as DashboardData);
+  const [selectedWallet, setSelectedWallet] = useState<WalletData | null>(null);
+
+  // Triggered when scanner finishes a crawl
+  const handleDataRefresh = (updatedData: DashboardData) => {
+    setData(updatedData);
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="relative min-h-screen flex flex-col pb-16 bg-background text-foreground bg-grid-cyber selection:bg-neon-cyan/20 selection:text-neon-cyan overflow-hidden">
+      
+      {/* Ambient background glows for gorgeous cyberpunk vibe */}
+      <div className="absolute top-[10%] left-[-10%] w-[500px] h-[500px] bg-neon-cyan/5 rounded-full blur-[180px] pointer-events-none" />
+      <div className="absolute top-[40%] right-[-10%] w-[500px] h-[500px] bg-neon-purple/5 rounded-full blur-[180px] pointer-events-none" />
+      <div className="absolute bottom-[10%] left-[20%] w-[600px] h-[600px] bg-neon-lime/3 rounded-full blur-[180px] pointer-events-none" />
+
+      {/* Header section */}
+      <Header lastUpdated={data.lastUpdated} onRefresh={handleDataRefresh} />
+
+      {/* KPI summaries row */}
+      <KPICards
+        totalUniqueDepositors={data.totalUniqueDepositors}
+        totalDeposits={data.totalDeposits}
+        totalUSDCDeposited={data.totalUSDCDeposited}
+        remainingCap={data.remainingCap}
+      />
+
+      {/* Chain stats row */}
+      <ChainCards base={data.chains.base} ethereum={data.chains.ethereum} />
+
+      {/* Growth Timeline & Capacity widget grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 px-6 md:px-12 py-3.5">
+        <div className="lg:col-span-2">
+          <GrowthChart data={data.growthData} />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="lg:col-span-1">
+          <CapacityWidget totalUSDCDeposited={data.totalUSDCDeposited} />
         </div>
-      </main>
+      </div>
+
+      {/* Explorer grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 px-6 md:px-12 py-3.5">
+        <div className="lg:col-span-2">
+          <WalletTable wallets={data.wallets} onSelectWallet={setSelectedWallet} />
+        </div>
+        <div className="lg:col-span-1">
+          <Leaderboard wallets={data.wallets} onSelectWallet={setSelectedWallet} />
+        </div>
+      </div>
+
+      {/* Slideout details drawer */}
+      <WalletDrawer wallet={selectedWallet} onClose={() => setSelectedWallet(null)} />
     </div>
   );
 }
