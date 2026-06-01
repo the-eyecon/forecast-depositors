@@ -67,6 +67,19 @@ export default function DashboardHome() {
 
       {/* Slideout details drawer */}
       <WalletDrawer wallet={selectedWallet} onClose={() => setSelectedWallet(null)} />
+
+      <footer className="mt-8 text-center text-xs text-zinc-500 pb-8">
+        Made by{' '}
+        <a
+          href="https://x.com/CryptoEyeCon"
+          target="_blank"
+          rel="noreferrer"
+          className="font-semibold text-neon-cyan hover:text-neon-cyan/80"
+        >
+          Eyecon
+        </a>{' '}
+        with ❤️
+      </footer>
     </div>
   );
 }
