@@ -261,25 +261,29 @@ export async function runScan() {
     growthData,
   };
 
-  // Ensure target folder exists
-  const targetDir = path.dirname("src/data/dashboard-data.json");
-  if (!fs.existsSync(targetDir)) {
-    fs.mkdirSync(targetDir, { recursive: true });
+  // Ensure target folder exists & write files (bypass if in read-only environment like Vercel)
+  try {
+    const targetDir = path.dirname("src/data/dashboard-data.json");
+    if (!fs.existsSync(targetDir)) {
+      fs.mkdirSync(targetDir, { recursive: true });
+    }
+
+    // Save JSON
+    fs.writeFileSync(
+      "src/data/dashboard-data.json",
+      JSON.stringify(dashboardData, null, 2)
+    );
+    console.log("Saved dashboard data to src/data/dashboard-data.json");
+
+    // Save legacy CSV
+    fs.writeFileSync(
+      "all-wallets.csv",
+      [...totalUniqueWallets].join("\n")
+    );
+    console.log("Saved unique wallets to all-wallets.csv");
+  } catch (fsError) {
+    console.warn("Telemetry file write bypassed (expected in read-only serverless environments like Vercel):", fsError.message);
   }
-
-  // Save JSON
-  fs.writeFileSync(
-    "src/data/dashboard-data.json",
-    JSON.stringify(dashboardData, null, 2)
-  );
-  console.log("Saved dashboard data to src/data/dashboard-data.json");
-
-  // Save legacy CSV
-  fs.writeFileSync(
-    "all-wallets.csv",
-    [...totalUniqueWallets].join("\n")
-  );
-  console.log("Saved unique wallets to all-wallets.csv");
 
   return dashboardData;
 }

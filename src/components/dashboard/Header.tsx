@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { RefreshCw, Activity, Terminal } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { RefreshCw, Activity, Terminal, Square } from "lucide-react";
 
 interface HeaderProps {
   lastUpdated: string;
@@ -13,6 +13,8 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
   const [scanStatus, setScanStatus] = useState("");
   const [timeAgo, setTimeAgo] = useState("Just now");
   const [timeLeft, setTimeLeft] = useState(1800); // 30 minutes in seconds
+
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   // Calculate Time Ago for "Last Updated"
   useEffect(() => {
@@ -35,7 +37,7 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
   }, [lastUpdated]);
 
   // Keep handleScan ref updated to prevent stale closures in interval
-  const handleScanRef = React.useRef<() => Promise<void>>(async () => {});
+  const handleScanRef = useRef<() => Promise<void>>(async () => {});
   useEffect(() => {
     handleScanRef.current = handleScan;
   });
@@ -62,6 +64,9 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
     setIsScanning(true);
     setScanStatus("Contacting RPCs...");
 
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     // Create fun progressive logs for realistic scanner experience
     const statuses = [
       "Contacting RPC providers...",
@@ -74,7 +79,7 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
     ];
 
     let currentStep = 0;
-    const interval = setInterval(() => {
+    const progressInterval = setInterval(() => {
       if (currentStep < statuses.length - 1) {
         currentStep++;
         setScanStatus(statuses[currentStep]);
@@ -84,10 +89,11 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
     try {
       const response = await fetch("/api/scan", {
         method: "POST",
+        signal: controller.signal,
       });
       const result = await response.json();
       
-      clearInterval(interval);
+      clearInterval(progressInterval);
 
       if (result.success && result.data) {
         setScanStatus("Scan complete!");
@@ -101,14 +107,31 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
         throw new Error(result.error || "Failed scan");
       }
     } catch (err: any) {
-      console.error(err);
-      clearInterval(interval);
-      setScanStatus("Scan failed! RPC rate-limit.");
-      setTimeLeft(1800); // Reset timer to 30 minutes even on failure to avoid loop
-      setTimeout(() => {
-        setIsScanning(false);
-        setScanStatus("");
-      }, 3000);
+      clearInterval(progressInterval);
+      if (err.name === "AbortError") {
+        setScanStatus("Scan aborted.");
+        setTimeLeft(1800); // Reset countdown on user cancel
+        setTimeout(() => {
+          setIsScanning(false);
+          setScanStatus("");
+        }, 1000);
+      } else {
+        console.error(err);
+        setScanStatus("Scan failed! RPC rate-limit.");
+        setTimeLeft(1800); // Reset timer even on failure to avoid loop
+        setTimeout(() => {
+          setIsScanning(false);
+          setScanStatus("");
+        }, 3000);
+      }
+    } finally {
+      abortControllerRef.current = null;
+    }
+  };
+
+  const handleStopScan = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
     }
   };
 
@@ -131,7 +154,7 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
       <div>
         <h1 className="font-space text-3xl font-bold tracking-tight text-white flex items-center gap-2.5">
           <span className="bg-gradient-to-r from-neon-cyan via-white to-neon-purple bg-clip-text text-transparent">
-            Forecast Pre-Deposit Analytics
+            Forecast Analytics
           </span>
           <span className="flex h-2.5 w-2.5 relative">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-cyan opacity-75"></span>
@@ -139,7 +162,7 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
           </span>
         </h1>
         <p className="text-zinc-500 text-sm mt-1 font-sans font-medium tracking-wide">
-          Cross-chain Pre-Deposit Dashboard
+          Cross-chain deposit intelligence
         </p>
       </div>
 
@@ -169,22 +192,25 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
 
           {/* Refresh/Scan Button */}
           <button
-            onClick={handleScan}
-            disabled={isScanning}
+            onClick={isScanning ? handleStopScan : handleScan}
             className={`
-              flex items-center gap-2 px-4 py-2 rounded-lg font-space font-semibold text-sm transition-all duration-300
+              flex items-center gap-2 px-4 py-2 rounded-lg font-space font-semibold text-sm transition-all duration-300 cursor-pointer
               ${
                 isScanning
-                  ? "bg-zinc-900 border border-neon-cyan/30 text-neon-cyan shadow-neon-cyan"
-                  : "bg-zinc-950 border border-zinc-800 hover:border-neon-cyan/40 text-white shadow-[0_0_20px_rgba(0,245,255,0.02)] hover:shadow-neon-cyan-hover hover:text-neon-cyan cursor-pointer"
+                  ? "bg-zinc-950 border border-red-500/35 text-red-400 hover:text-red-300 hover:border-red-500/60 hover:shadow-[0_0_20px_rgba(239,68,68,0.2)]"
+                  : "bg-zinc-950 border border-zinc-800 hover:border-neon-cyan/40 text-white shadow-[0_0_20px_rgba(0,245,255,0.02)] hover:shadow-neon-cyan-hover hover:text-neon-cyan"
               }
             `}
           >
-            <RefreshCw
-              size={14}
-              className={`transition-transform duration-500 ${isScanning ? "animate-spin text-neon-cyan" : ""}`}
-            />
-            {isScanning ? "Scanning Chain..." : "Refresh Scan"}
+            {isScanning ? (
+              <Square size={10} className="fill-red-400 stroke-red-400 animate-pulse" />
+            ) : (
+              <RefreshCw
+                size={14}
+                className="transition-transform duration-500"
+              />
+            )}
+            {isScanning ? "Stop Scan" : "Refresh Scan"}
           </button>
         </div>
       </div>
