@@ -12,7 +12,7 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
   const [isScanning, setIsScanning] = useState(false);
   const [scanStatus, setScanStatus] = useState("");
   const [timeAgo, setTimeAgo] = useState("Just now");
-  const [timeLeft, setTimeLeft] = useState(7200); // 2 hours in seconds
+  const [timeLeft, setTimeLeft] = useState(1800); // 30 minutes in seconds
 
   // Calculate Time Ago for "Last Updated"
   useEffect(() => {
@@ -48,7 +48,7 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           handleScanRef.current();
-          return 7200; // Reset countdown
+          return 1800; // Reset countdown
         }
         return prev - 1;
       });
@@ -91,7 +91,7 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
 
       if (result.success && result.data) {
         setScanStatus("Scan complete!");
-        setTimeLeft(7200); // Reset timer to 2 hours on successful scan
+        setTimeLeft(1800); // Reset timer to 30 minutes on successful scan
         setTimeout(() => {
           onRefresh(result.data);
           setIsScanning(false);
@@ -104,7 +104,7 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
       console.error(err);
       clearInterval(interval);
       setScanStatus("Scan failed! RPC rate-limit.");
-      setTimeLeft(7200); // Reset timer to 2 hours even on failure to avoid loop
+      setTimeLeft(1800); // Reset timer to 30 minutes even on failure to avoid loop
       setTimeout(() => {
         setIsScanning(false);
         setScanStatus("");
