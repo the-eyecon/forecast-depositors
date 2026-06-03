@@ -12,6 +12,7 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
   const [isScanning, setIsScanning] = useState(false);
   const [scanStatus, setScanStatus] = useState("");
   const [timeAgo, setTimeAgo] = useState("Just now");
+  const [timeLeft, setTimeLeft] = useState(7200); // 2 hours in seconds
 
   // Calculate Time Ago for "Last Updated"
   useEffect(() => {
@@ -32,6 +33,29 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
     const interval = setInterval(calculateTimeAgo, 30000); // Update every 30s
     return () => clearInterval(interval);
   }, [lastUpdated]);
+
+  // Keep handleScan ref updated to prevent stale closures in interval
+  const handleScanRef = React.useRef<() => Promise<void>>(async () => {});
+  useEffect(() => {
+    handleScanRef.current = handleScan;
+  });
+
+  // Auto-refresh countdown timer
+  useEffect(() => {
+    if (isScanning) return; // Pause countdown while scanning is active
+
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          handleScanRef.current();
+          return 7200; // Reset countdown
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [isScanning]);
 
   const handleScan = async () => {
     if (isScanning) return;
@@ -67,6 +91,7 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
 
       if (result.success && result.data) {
         setScanStatus("Scan complete!");
+        setTimeLeft(7200); // Reset timer to 2 hours on successful scan
         setTimeout(() => {
           onRefresh(result.data);
           setIsScanning(false);
@@ -79,11 +104,22 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
       console.error(err);
       clearInterval(interval);
       setScanStatus("Scan failed! RPC rate-limit.");
+      setTimeLeft(7200); // Reset timer to 2 hours even on failure to avoid loop
       setTimeout(() => {
         setIsScanning(false);
         setScanStatus("");
       }, 3000);
     }
+  };
+
+  // Helper to format seconds to HH:MM:SS
+  const formatTime = (seconds: number) => {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+    
+    const pad = (num: number) => String(num).padStart(2, "0");
+    return `${pad(h)}:${pad(m)}:${pad(s)}`;
   };
 
   return (
@@ -95,7 +131,7 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
       <div>
         <h1 className="font-space text-3xl font-bold tracking-tight text-white flex items-center gap-2.5">
           <span className="bg-gradient-to-r from-neon-cyan via-white to-neon-purple bg-clip-text text-transparent">
-            Forecast Analytics
+            Forecast Pre-Deposit Analytics
           </span>
           <span className="flex h-2.5 w-2.5 relative">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-cyan opacity-75"></span>
@@ -103,7 +139,7 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
           </span>
         </h1>
         <p className="text-zinc-500 text-sm mt-1 font-sans font-medium tracking-wide">
-          Cross-chain deposit intelligence
+          Cross-chain Pre-Deposit Dashboard
         </p>
       </div>
 
@@ -121,10 +157,13 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
           {/* Last Updated telemetric tag */}
           <div className="flex flex-col items-end">
             <span className="text-[10px] uppercase font-semibold text-zinc-600 tracking-widest font-mono">
-              Telemetry Status
+              Deposit Status
             </span>
-            <span className="text-sm font-mono text-zinc-400 font-medium">
-              Last Updated: <span className="text-white">{timeAgo}</span>
+            <span className="text-xs font-mono text-zinc-400 font-medium">
+              Last Updated: <span className="text-white font-semibold">{timeAgo}</span>
+            </span>
+            <span className="text-[10px] font-mono text-neon-cyan/70 mt-0.5">
+              Next Auto Update: <span className="text-white font-bold">{formatTime(timeLeft)}</span>
             </span>
           </div>
 
