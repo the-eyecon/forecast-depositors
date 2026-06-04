@@ -14,19 +14,27 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
   const [isScanning, setIsScanning] = useState(false);
   const [scanStatus, setScanStatus] = useState("");
   const [timeAgo, setTimeAgo] = useState("Just now");
-  const [timeLeft, setTimeLeft] = useState(() => {
-    // Initialize countdown from lastUpdated so it's always in sync
-    const elapsed = Math.floor((Date.now() - new Date(lastUpdated).getTime()) / 1000);
-    return Math.max(0, REFRESH_INTERVAL - elapsed);
-  });
+  const [timeLeft, setTimeLeft] = useState(REFRESH_INTERVAL);
 
   const abortControllerRef = useRef<AbortController | null>(null);
+
+  // Sync timer when lastUpdated changes (e.g., on mount or after a successful scan)
+  useEffect(() => {
+    const elapsedMs = Date.now() - new Date(lastUpdated).getTime();
+    const elapsedSec = Math.floor(elapsedMs / 1000);
+
+    if (elapsedSec < REFRESH_INTERVAL) {
+      setTimeLeft(REFRESH_INTERVAL - elapsedSec);
+    } else {
+      // If stale (e.g., older than 30 minutes on initial load), start countdown from 30 minutes to prevent immediate scan
+      setTimeLeft(REFRESH_INTERVAL);
+    }
+  }, [lastUpdated]);
 
   // Unified tick: update both "time ago" and "time left" every second from the same source
   useEffect(() => {
     const tick = () => {
       const elapsedMs = Date.now() - new Date(lastUpdated).getTime();
-      const elapsedSec = Math.floor(elapsedMs / 1000);
       const elapsedMins = Math.floor(elapsedMs / 60000);
 
       // Update "Last Updated" display
@@ -38,9 +46,9 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
         setTimeAgo(`${elapsedMins}m ago`);
       }
 
-      // Update countdown (only if not currently scanning)
+      // Decrement countdown (only if not currently scanning)
       if (!isScanning) {
-        setTimeLeft(Math.max(0, REFRESH_INTERVAL - elapsedSec));
+        setTimeLeft((prev) => Math.max(0, prev - 1));
       }
     };
 

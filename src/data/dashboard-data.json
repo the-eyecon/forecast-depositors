@@ -1,14 +1,14 @@
 {
-  "totalUniqueDepositors": 422,
-  "totalDeposits": 484,
-  "totalUSDCDeposited": 843295.12,
-  "remainingCap": 1156704.88,
-  "lastUpdated": "2026-06-04T07:36:30.257Z",
+  "totalUniqueDepositors": 423,
+  "totalDeposits": 485,
+  "totalUSDCDeposited": 843305.12,
+  "remainingCap": 1156694.88,
+  "lastUpdated": "2026-06-04T11:28:44.109Z",
   "chains": {
     "base": {
-      "uniqueDepositors": 367,
-      "deposits": 417,
-      "totalUSDC": 619717.11
+      "uniqueDepositors": 368,
+      "deposits": 418,
+      "totalUSDC": 619727.11
     },
     "ethereum": {
       "uniqueDepositors": 58,
@@ -7357,6 +7357,25 @@
       ]
     },
     {
+      "address": "0x241986a0dc6c08ec53fa3535beb4a52adc63ef73",
+      "chains": [
+        "base"
+      ],
+      "totalDeposits": 1,
+      "totalUSDC": 10,
+      "firstDeposit": "2026-06-04",
+      "lastDeposit": "2026-06-04",
+      "history": [
+        {
+          "txHash": "0xaa1fa07d271614d4193795dc4acae330a46f62690d704183dca7607cec4d0aec",
+          "chain": "base",
+          "amount": 10,
+          "blockNumber": 46886965,
+          "date": "2026-06-04"
+        }
+      ]
+    },
+    {
       "address": "0x4d2ccf48b1e2300485da3b572998aa1951e98c12",
       "chains": [
         "base"
@@ -8608,9 +8627,9 @@
     },
     {
       "date": "2026-06-04",
-      "baseUSDC": 619717.11,
+      "baseUSDC": 619727.11,
       "ethUSDC": 223578.01,
-      "totalUSDC": 843295.12
+      "totalUSDC": 843305.12
     }
   ]
 }
