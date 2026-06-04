@@ -165,7 +165,7 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
       <div>
         <h1 className="font-space text-3xl font-bold tracking-tight text-white flex items-center gap-2.5">
           <span className="bg-gradient-to-r from-neon-cyan via-white to-neon-purple bg-clip-text text-transparent">
-            Forecast Analytics
+            Forecast Deposit Analytics
           </span>
           <span className="flex h-2.5 w-2.5 relative">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neon-cyan opacity-75"></span>
@@ -173,7 +173,7 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
           </span>
         </h1>
         <p className="text-zinc-500 text-sm mt-1 font-sans font-medium tracking-wide">
-          Cross-chain deposit intelligence
+          Cross-chain Pre-Deposit metrics and insights
         </p>
       </div>
 
