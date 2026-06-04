@@ -9,55 +9,58 @@ interface HeaderProps {
 }
 
 export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
+  const REFRESH_INTERVAL = 1800; // 30 minutes in seconds
+
   const [isScanning, setIsScanning] = useState(false);
   const [scanStatus, setScanStatus] = useState("");
   const [timeAgo, setTimeAgo] = useState("Just now");
-  const [timeLeft, setTimeLeft] = useState(1800); // 30 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(() => {
+    // Initialize countdown from lastUpdated so it's always in sync
+    const elapsed = Math.floor((Date.now() - new Date(lastUpdated).getTime()) / 1000);
+    return Math.max(0, REFRESH_INTERVAL - elapsed);
+  });
 
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  // Calculate Time Ago for "Last Updated"
+  // Unified tick: update both "time ago" and "time left" every second from the same source
   useEffect(() => {
-    const calculateTimeAgo = () => {
-      const diffMs = Date.now() - new Date(lastUpdated).getTime();
-      const diffMins = Math.floor(diffMs / 60000);
-      
-      if (diffMins < 1) {
+    const tick = () => {
+      const elapsedMs = Date.now() - new Date(lastUpdated).getTime();
+      const elapsedSec = Math.floor(elapsedMs / 1000);
+      const elapsedMins = Math.floor(elapsedMs / 60000);
+
+      // Update "Last Updated" display
+      if (elapsedMins < 1) {
         setTimeAgo("Just now");
-      } else if (diffMins === 1) {
+      } else if (elapsedMins === 1) {
         setTimeAgo("1m ago");
       } else {
-        setTimeAgo(`${diffMins}m ago`);
+        setTimeAgo(`${elapsedMins}m ago`);
+      }
+
+      // Update countdown (only if not currently scanning)
+      if (!isScanning) {
+        setTimeLeft(Math.max(0, REFRESH_INTERVAL - elapsedSec));
       }
     };
 
-    calculateTimeAgo();
-    const interval = setInterval(calculateTimeAgo, 30000); // Update every 30s
+    tick(); // Run immediately on mount / lastUpdated change
+    const interval = setInterval(tick, 1000);
     return () => clearInterval(interval);
-  }, [lastUpdated]);
+  }, [lastUpdated, isScanning]);
 
-  // Keep handleScan ref updated to prevent stale closures in interval
+  // Keep handleScan ref updated to prevent stale closures
   const handleScanRef = useRef<() => Promise<void>>(async () => {});
   useEffect(() => {
     handleScanRef.current = handleScan;
   });
 
-  // Auto-refresh countdown timer
+  // Trigger auto-scan when countdown reaches 0
   useEffect(() => {
-    if (isScanning) return; // Pause countdown while scanning is active
-
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          handleScanRef.current();
-          return 1800; // Reset countdown
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [isScanning]);
+    if (timeLeft === 0 && !isScanning) {
+      handleScanRef.current();
+    }
+  }, [timeLeft, isScanning]);
 
   const handleScan = async () => {
     if (isScanning) return;
@@ -110,7 +113,7 @@ export default function Header({ lastUpdated, onRefresh }: HeaderProps) {
       clearInterval(progressInterval);
       if (err.name === "AbortError") {
         setScanStatus("Scan aborted.");
-        setTimeLeft(1800); // Reset countdown on user cancel
+        setTimeLeft((prev) => (prev <= 5 ? 1800 : prev)); // Retain previous countdown time on abort
         setTimeout(() => {
           setIsScanning(false);
           setScanStatus("");

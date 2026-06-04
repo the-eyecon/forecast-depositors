@@ -1,19 +1,19 @@
 {
-  "totalUniqueDepositors": 410,
-  "totalDeposits": 471,
-  "totalUSDCDeposited": 814667.59,
-  "remainingCap": 1185332.41,
-  "lastUpdated": "2026-06-03T12:41:22.236Z",
+  "totalUniqueDepositors": 422,
+  "totalDeposits": 484,
+  "totalUSDCDeposited": 843295.12,
+  "remainingCap": 1156704.88,
+  "lastUpdated": "2026-06-04T07:36:30.257Z",
   "chains": {
     "base": {
-      "uniqueDepositors": 356,
-      "deposits": 405,
-      "totalUSDC": 597089.58
+      "uniqueDepositors": 367,
+      "deposits": 417,
+      "totalUSDC": 619717.11
     },
     "ethereum": {
-      "uniqueDepositors": 57,
-      "deposits": 66,
-      "totalUSDC": 217578.01
+      "uniqueDepositors": 58,
+      "deposits": 67,
+      "totalUSDC": 223578.01
     }
   },
   "wallets": [
@@ -1106,6 +1106,25 @@
       ]
     },
     {
+      "address": "0x2cf1e7137efae14caa26b9bd60cf16fd52d5157e",
+      "chains": [
+        "base"
+      ],
+      "totalDeposits": 1,
+      "totalUSDC": 10000,
+      "firstDeposit": "2026-06-03",
+      "lastDeposit": "2026-06-03",
+      "history": [
+        {
+          "txHash": "0x82f5d36d4590cfa32ab55d93f72e83881dcba2eb5756bea9d5e2f24569480a09",
+          "chain": "base",
+          "amount": 10000,
+          "blockNumber": 46862190,
+          "date": "2026-06-03"
+        }
+      ]
+    },
+    {
       "address": "0xeb42c6e1343da0e929c7bca68ef27a47090ef149",
       "chains": [
         "ethereum"
@@ -1249,6 +1268,44 @@
           "amount": 2850,
           "blockNumber": 25209973,
           "date": "2026-05-30"
+        }
+      ]
+    },
+    {
+      "address": "0x995d697ac37916b79a6a00e07e2df07bdca7c1b5",
+      "chains": [
+        "base"
+      ],
+      "totalDeposits": 1,
+      "totalUSDC": 6000,
+      "firstDeposit": "2026-06-03",
+      "lastDeposit": "2026-06-03",
+      "history": [
+        {
+          "txHash": "0x7b43a5e586a3df860726a20cb8023eb77dee2ed8efc9b26f219a42425d271e35",
+          "chain": "base",
+          "amount": 6000,
+          "blockNumber": 46853665,
+          "date": "2026-06-03"
+        }
+      ]
+    },
+    {
+      "address": "0xf3c3fd0f16424ebdbea2537a4dfb22143642464c",
+      "chains": [
+        "ethereum"
+      ],
+      "totalDeposits": 1,
+      "totalUSDC": 6000,
+      "firstDeposit": "2026-06-03",
+      "lastDeposit": "2026-06-03",
+      "history": [
+        {
+          "txHash": "0x0b73fc02ace4a3a29532c13b24a582edc53533ee67441b9469f443714ed42b41",
+          "chain": "ethereum",
+          "amount": 6000,
+          "blockNumber": 25238767,
+          "date": "2026-06-03"
         }
       ]
     },
@@ -1847,6 +1904,25 @@
       ]
     },
     {
+      "address": "0x6dba3004e784fe836c224b42691b25fba9f6a267",
+      "chains": [
+        "base"
+      ],
+      "totalDeposits": 1,
+      "totalUSDC": 3000,
+      "firstDeposit": "2026-06-04",
+      "lastDeposit": "2026-06-04",
+      "history": [
+        {
+          "txHash": "0x5b0a177e0fec9ec007b30c32beee006964a0193c913b348828e9fc7997bb58f2",
+          "chain": "base",
+          "amount": 3000,
+          "blockNumber": 46882088,
+          "date": "2026-06-04"
+        }
+      ]
+    },
+    {
       "address": "0xd5da8f9fd8d64a9c074bf664b9678e9ed9cc57f8",
       "chains": [
         "ethereum"
@@ -2070,6 +2146,25 @@
       ]
     },
     {
+      "address": "0x45c6bd00bec90a5704ff8bc18226ca6e36b992c3",
+      "chains": [
+        "base"
+      ],
+      "totalDeposits": 1,
+      "totalUSDC": 2000,
+      "firstDeposit": "2026-06-03",
+      "lastDeposit": "2026-06-03",
+      "history": [
+        {
+          "txHash": "0x340a270a5148d01ee1bc075130c8328321e11ab18538ce91cde110eca45c8482",
+          "chain": "base",
+          "amount": 2000,
+          "blockNumber": 46851885,
+          "date": "2026-06-03"
+        }
+      ]
+    },
+    {
       "address": "0xcf313041ec07818a5c205e15434937db097e65d9",
       "chains": [
         "base"
@@ -2194,6 +2289,25 @@
           "amount": 1500,
           "blockNumber": 46719300,
           "date": "2026-05-31"
+        }
+      ]
+    },
+    {
+      "address": "0x45062198f372195a36a0937b5c537105c91f3e9f",
+      "chains": [
+        "base"
+      ],
+      "totalDeposits": 1,
+      "totalUSDC": 1479,
+      "firstDeposit": "2026-06-03",
+      "lastDeposit": "2026-06-03",
+      "history": [
+        {
+          "txHash": "0x0f7c275186ec84445fa2ab2e7965a370782f8b923b1064c461ad9ccfe2099d68",
+          "chain": "base",
+          "amount": 1479,
+          "blockNumber": 46856892,
+          "date": "2026-06-03"
         }
       ]
     },
@@ -3538,6 +3652,32 @@
       ]
     },
     {
+      "address": "0x0bf6c36a8bce62d98470a9cd4df80f6bee960483",
+      "chains": [
+        "base"
+      ],
+      "totalDeposits": 2,
+      "totalUSDC": 219,
+      "firstDeposit": "2026-06-03",
+      "lastDeposit": "2026-06-04",
+      "history": [
+        {
+          "txHash": "0xa8316080ea35c3ec00f684582aa172e1c5fceee234f777477a76bb5fef8e4bb8",
+          "chain": "base",
+          "amount": 100,
+          "blockNumber": 46879760,
+          "date": "2026-06-04"
+        },
+        {
+          "txHash": "0x1cdaf6c6f330dda04cd9c4f3de4f372a7480f5b8d1adf5537ecde7042ee70da4",
+          "chain": "base",
+          "amount": 119,
+          "blockNumber": 46832287,
+          "date": "2026-06-03"
+        }
+      ]
+    },
+    {
       "address": "0xfc6a529b440369d847ae41a7577806544a871a7f",
       "chains": [
         "base"
@@ -3923,25 +4063,6 @@
           "amount": 111,
           "blockNumber": 46312859,
           "date": "2026-05-22"
-        }
-      ]
-    },
-    {
-      "address": "0x0bf6c36a8bce62d98470a9cd4df80f6bee960483",
-      "chains": [
-        "base"
-      ],
-      "totalDeposits": 1,
-      "totalUSDC": 119,
-      "firstDeposit": "2026-06-03",
-      "lastDeposit": "2026-06-03",
-      "history": [
-        {
-          "txHash": "0x1cdaf6c6f330dda04cd9c4f3de4f372a7480f5b8d1adf5537ecde7042ee70da4",
-          "chain": "base",
-          "amount": 119,
-          "blockNumber": 46832287,
-          "date": "2026-06-03"
         }
       ]
     },
@@ -5245,6 +5366,25 @@
           "amount": 33,
           "blockNumber": 46634626,
           "date": "2026-05-29"
+        }
+      ]
+    },
+    {
+      "address": "0x9ce716ac53286c115403c3b74e436a04ad047835",
+      "chains": [
+        "base"
+      ],
+      "totalDeposits": 1,
+      "totalUSDC": 33,
+      "firstDeposit": "2026-06-03",
+      "lastDeposit": "2026-06-03",
+      "history": [
+        {
+          "txHash": "0xbd836d685085d46795aabec7e9b46360bc93195fbeb5ae4cf433a6f1cf20df8e",
+          "chain": "base",
+          "amount": 33,
+          "blockNumber": 46855717,
+          "date": "2026-06-03"
         }
       ]
     },
@@ -7198,6 +7338,25 @@
       ]
     },
     {
+      "address": "0x248f9ad777de90d51cd4cacb051330062d722931",
+      "chains": [
+        "base"
+      ],
+      "totalDeposits": 1,
+      "totalUSDC": 10,
+      "firstDeposit": "2026-06-03",
+      "lastDeposit": "2026-06-03",
+      "history": [
+        {
+          "txHash": "0x7a5fbb9310f614252e94e58d684e2b69c1ea33ee01ab7ca10cbf1782c7371fad",
+          "chain": "base",
+          "amount": 10,
+          "blockNumber": 46858867,
+          "date": "2026-06-03"
+        }
+      ]
+    },
+    {
       "address": "0x4d2ccf48b1e2300485da3b572998aa1951e98c12",
       "chains": [
         "base"
@@ -7915,6 +8074,63 @@
       ]
     },
     {
+      "address": "0x70c0c5d8251884e4cdff807477886cd5c17147b0",
+      "chains": [
+        "base"
+      ],
+      "totalDeposits": 1,
+      "totalUSDC": 1.55,
+      "firstDeposit": "2026-06-03",
+      "lastDeposit": "2026-06-03",
+      "history": [
+        {
+          "txHash": "0xfd5a254de09300b359b20ba164d882ed96d4e10edea43ac7dbae28e65694aa16",
+          "chain": "base",
+          "amount": 1.55,
+          "blockNumber": 46855153,
+          "date": "2026-06-03"
+        }
+      ]
+    },
+    {
+      "address": "0x32ad447b52b24dbf1d74efb2e1be1c5f71c11517",
+      "chains": [
+        "base"
+      ],
+      "totalDeposits": 1,
+      "totalUSDC": 1.5,
+      "firstDeposit": "2026-06-03",
+      "lastDeposit": "2026-06-03",
+      "history": [
+        {
+          "txHash": "0x685e6560cd5db256c8300585fed01551d1e131c060a63b6f0a9fead82f88d828",
+          "chain": "base",
+          "amount": 1.5,
+          "blockNumber": 46854971,
+          "date": "2026-06-03"
+        }
+      ]
+    },
+    {
+      "address": "0x7cf1e4a4c7af4c069e1b2a7ac4352303659d4f46",
+      "chains": [
+        "base"
+      ],
+      "totalDeposits": 1,
+      "totalUSDC": 1.48,
+      "firstDeposit": "2026-06-03",
+      "lastDeposit": "2026-06-03",
+      "history": [
+        {
+          "txHash": "0xcfde2cfad72d327235f41ab98526263b1b9e0a2bdffe0a97d1e8045c834e0320",
+          "chain": "base",
+          "amount": 1.48,
+          "blockNumber": 46855245,
+          "date": "2026-06-03"
+        }
+      ]
+    },
+    {
       "address": "0x7321bde7749d3e5729e8d60c8fc0c16a7c2029f8",
       "chains": [
         "base"
@@ -8162,6 +8378,25 @@
       ]
     },
     {
+      "address": "0xa1d5d2d931b532a0503e97f540f65ed256f374e6",
+      "chains": [
+        "base"
+      ],
+      "totalDeposits": 1,
+      "totalUSDC": 1,
+      "firstDeposit": "2026-06-03",
+      "lastDeposit": "2026-06-03",
+      "history": [
+        {
+          "txHash": "0x4f7e336c85bb5ebf0b75836a1f4dc811ec7f9ae750fb3d5e6bc26c9f4a1546c4",
+          "chain": "base",
+          "amount": 1,
+          "blockNumber": 46864705,
+          "date": "2026-06-03"
+        }
+      ]
+    },
+    {
       "address": "0x60bc5323c0e0e9144af0b35ce8de119fc743e345",
       "chains": [
         "base"
@@ -8367,9 +8602,15 @@
     },
     {
       "date": "2026-06-03",
-      "baseUSDC": 597089.58,
-      "ethUSDC": 217578.01,
-      "totalUSDC": 814667.59
+      "baseUSDC": 616617.11,
+      "ethUSDC": 223578.01,
+      "totalUSDC": 840195.12
+    },
+    {
+      "date": "2026-06-04",
+      "baseUSDC": 619717.11,
+      "ethUSDC": 223578.01,
+      "totalUSDC": 843295.12
     }
   ]
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Users, BarChart3, Coins, Database } from "lucide-react";
+import { Users, BarChart3, Coins, Database, Download } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface KPICardsProps {
@@ -9,6 +9,7 @@ interface KPICardsProps {
   totalDeposits: number;
   totalUSDCDeposited: number;
   remainingCap: number;
+  wallets?: Array<{ address: string }>;
 }
 
 export default function KPICards({
@@ -16,9 +17,29 @@ export default function KPICards({
   totalDeposits,
   totalUSDCDeposited,
   remainingCap,
+  wallets = [],
 }: KPICardsProps) {
   const CAPACITY = 2000000;
   const percentFilled = (totalUSDCDeposited / CAPACITY) * 100;
+
+  const handleDownloadCSV = () => {
+    if (!wallets || wallets.length === 0) return;
+    
+    // Generate CSV content: list of unique wallet addresses separated by newlines
+    const uniqueAddresses = wallets.map((w) => w.address.toLowerCase());
+    const csvContent = uniqueAddresses.join("\n");
+    
+    // Create blob and trigger download
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "deposit-wallets.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const cards = [
     {
@@ -162,13 +183,25 @@ export default function KPICards({
               <Icon size={18} className={card.textColor} />
             </div>
 
-            <div className="mt-3 flex flex-col">
-              <span className="text-3xl font-mono font-bold text-white tracking-tight">
-                {card.value}
-              </span>
-              <span className="text-xs text-zinc-500 font-sans mt-0.5 font-medium">
-                {card.subtext}
-              </span>
+            <div className="mt-3 flex items-end justify-between">
+              <div className="flex flex-col">
+                <span className="text-3xl font-mono font-bold text-white tracking-tight">
+                  {card.value}
+                </span>
+                <span className="text-xs text-zinc-500 font-sans mt-0.5 font-medium">
+                  {card.subtext}
+                </span>
+              </div>
+              
+              {card.title === "Total Unique Depositors" && wallets.length > 0 && (
+                <button
+                  onClick={handleDownloadCSV}
+                  title="Download Unique Wallets CSV"
+                  className="p-2 rounded-lg bg-zinc-900 border border-zinc-800 hover:border-neon-cyan text-zinc-400 hover:text-neon-cyan hover:shadow-[0_0_10px_rgba(0,245,255,0.15)] transition-all duration-200 cursor-pointer flex items-center justify-center z-10"
+                >
+                  <Download size={14} />
+                </button>
+              )}
             </div>
           </motion.div>
         );

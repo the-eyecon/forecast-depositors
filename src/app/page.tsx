@@ -40,6 +40,7 @@ export default function DashboardHome() {
         totalDeposits={data.totalDeposits}
         totalUSDCDeposited={data.totalUSDCDeposited}
         remainingCap={data.remainingCap}
+        wallets={data.wallets}
       />
 
       {/* Chain stats row */}

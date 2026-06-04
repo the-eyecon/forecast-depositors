@@ -274,13 +274,6 @@ export async function runScan() {
       JSON.stringify(dashboardData, null, 2)
     );
     console.log("Saved dashboard data to src/data/dashboard-data.json");
-
-    // Save legacy CSV
-    fs.writeFileSync(
-      "all-wallets.csv",
-      [...totalUniqueWallets].join("\n")
-    );
-    console.log("Saved unique wallets to all-wallets.csv");
   } catch (fsError) {
     console.warn("Telemetry file write bypassed (expected in read-only serverless environments like Vercel):", fsError.message);
   }
